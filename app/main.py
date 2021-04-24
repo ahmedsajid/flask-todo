@@ -1,19 +1,24 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 app = Flask(__name__)
 
 # /// = relative path, //// = absolute path
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URI','sqlite:///todo.sqlite')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.getenv('DB_TRACK_MODIFICATIONS',False)
 db = SQLAlchemy(app)
-
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     complete = db.Column(db.Boolean)
 
+@app.route("/init")
+def init():
+    db.create_all()
+    data = {'app': 'Todo List App','version': '1.0','db': 'initialized'}
+    return jsonify(data), 200
 
 @app.route("/")
 def home():
@@ -44,6 +49,12 @@ def delete(todo_id):
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for("home"))
+
+@app.route("/health")
+def health():
+    db.engine.execute('SELECT 1')
+    data = {'app': 'Todo List App','version': '1.0','health': 'ok'}
+    return jsonify(data), 200
 
 if __name__ == "__main__":
     db.create_all()

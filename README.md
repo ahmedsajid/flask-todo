@@ -1,45 +1,53 @@
-Simple Flask Todo App using SQLAlchemy and SQLite database.
+# Simple Todo App
 
-For styling [semantic-ui](https://semantic-ui.com/) is used.
+Simple Stateless Flask Application for manging Todo list.
 
-### Setup
-Create project with virtual environment
+Forked from https://github.com/python-engineer/flask-todo
 
-```console
-$ mkdir myproject
-$ cd myproject
-$ python3 -m venv venv
+## Building
+
+```
+docker build -t flask-todo-app .
 ```
 
-Activate it
-```console
-$ . venv/bin/activate
+## Running
+
+```
+docker run -d -p 80:80 --name todoapp flask-todo-app
 ```
 
-or on Windows
-```console
-venv\Scripts\activate
+## Initializing
+You need to initialize the DB before proceeding.
+
+```
+curl 127.0.0.1/init
 ```
 
-Install Flask
-```console
-$ pip install Flask
-$ pip install Flask-SQLAlchemy
+## Accessing
+Just put IPADDRESS or HOSTNAME on your Browser URL. 
+
+```
+http://127.0.0.1
 ```
 
-Set environment variables in terminal
-```console
-$ export FLASK_APP=app.py
-$ export FLASK_ENV=development
-```
+## Customization
 
-or on Windows
-```console
-$ set FLASK_APP=app.py
-$ set FLASK_ENV=development
-```
+| Env                    | Defaults             | Description                        |
+|------------------------|----------------------|------------------------------------|
+| DB_URI                 | sqlite://todo.sqlite | Your Backend DB URI                |
+| DB_TRACK_MODIFICATIONS | False                | For SQLALCHEMY_TRACK_MODIFICATIONS |
+| LISTEN_PORT            | 80                   | Listening Port for Nginx           |
+| NGINX_MAX_UPLOAD       | 0                    |                                    |
+| NGINX_WORKER_PROCESSES | 1                    |                                    |
+| PYTHONPATH             | /app                 | PATH to your Python App            |
+| STATIC_INDEX           | 0                    |                                    |
+| STATIC_PATH            | /app/static          |                                    |
+| STATIC_URL             | /static              |                                    |
+| UWSGI_CHEAPER          | 2                    |                                    |
+| UWSGI_INI              | /app/uwsgi.ini       |                                    |
+| UWSGI_PROCESSES        | 16                   |                                    |
 
-Run the app
-```console
-$ flask run
-```
+
+## Advanced Stuff
+
+To perform any customization such as changing listening port and else see https://github.com/tiangolo/uwsgi-nginx-flask-docker#advanced-instructions
