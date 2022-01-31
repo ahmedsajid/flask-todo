@@ -5,8 +5,8 @@ import os
 app = Flask(__name__)
 
 # /// = relative path, //// = absolute path
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URI','sqlite:///todo.sqlite')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.getenv('DB_TRACK_MODIFICATIONS',False)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DB_URI', 'sqlite:///todo.sqlite')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.getenv('DB_TRACK_MODIFICATIONS', False)
 db = SQLAlchemy(app)
 
 class Todo(db.Model):

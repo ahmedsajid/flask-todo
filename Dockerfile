@@ -1,4 +1,4 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.8 as base
+FROM ahmedsajid/uwsgi-nginx-flask:python3.9 as base
 
 COPY requirements.txt requirements.txt
 COPY ./app/main.py /app/main.py
@@ -6,6 +6,7 @@ COPY ./app/templates /app/templates
 
 RUN apt-get update \
     && apt-get -y dist-upgrade \
+    && apt-get -y install libpq-dev \
     && apt-get clean autoclean \
     && apt-get autoremove -y \
     && rm -rf /var/lib/cache /var/lib/log /var/lib/apt/lists/* \
